@@ -16,8 +16,8 @@ public class GameStateManager : MonoBehaviour
     [SerializeField] private TMP_InputField textField, numberField;
     [SerializeField] private TMP_Text nameText, scoreText;
 
-    public UnityEvent OnDataSaved = new UnityEvent();
-    public UnityEvent OnDataLoaded = new UnityEvent();
+    public UnityEvent OnDataSaved;
+    public UnityEvent OnDataLoaded;
 
 
     public void SaveDataButtonClick()
