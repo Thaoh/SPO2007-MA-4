@@ -7,6 +7,7 @@ using Unity.Services.CloudSave.Models;
 using Unity.Services.CloudSave.Models.Data.Player;
 using SaveOptions = Unity.Services.CloudSave.Models.Data.Player.SaveOptions;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using TMPro;
 using UnityEngine.Events;
 
@@ -17,26 +18,33 @@ public class GameStateManager : MonoBehaviour
 
     public UnityEvent OnDataSaved = new UnityEvent();
     public UnityEvent OnDataLoaded = new UnityEvent();
-    
 
-    public async void SaveData()
+
+    public void SaveDataButtonClick()
+    {
+        _ = SaveData();
+        OnDataSaved.Invoke();
+    }
+    
+    public async Task SaveData()
     {
         try
         {
             if (textField.text != "" && numberField.text != "")
             {
+                await AuthenticationService.Instance.UpdatePlayerNameAsync(textField.text);
                 var playerData = new Dictionary<string, object>{
                     {"Name", textField.text},
                     {"Score", numberField.text}
                 };
                 await CloudSaveService.Instance.Data.Player.SaveAsync(playerData);
                 Debug.Log($"Saved data {string.Join(',', playerData)}");
+                
             }
             else
             {
                 return;
             }
-            OnDataSaved.Invoke();
         }
         catch (Exception e)
         {
