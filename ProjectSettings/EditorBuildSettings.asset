@@ -6,10 +6,10 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
-    path: Assets/Scenes/Playfab - User Authentication.unity
+    path: Assets/Scenes/Research/Playfab - User Authentication.unity
     guid: f640d011cf7c4a44c8a187b7eaff713b
   - enabled: 1
-    path: Assets/Scenes/Playfab - Leaderboards.unity
+    path: Assets/Scenes/Research/Playfab - Leaderboards.unity
     guid: 94bef2f2548ab624fa298299beb44cd3
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

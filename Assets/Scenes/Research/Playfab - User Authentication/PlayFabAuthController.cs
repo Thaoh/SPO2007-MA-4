@@ -57,7 +57,6 @@ public class PlayFabAuthController : MonoBehaviour {
 		FeedbackText.text = "Registration Error: " + error.ErrorMessage; // Update UI
 	}
 
-
 	private void OnLoginSuccess(LoginResult result) {
 		Debug.Log("Login successful!");
 		FeedbackText.text = "Login Successful!"; // Update UI
