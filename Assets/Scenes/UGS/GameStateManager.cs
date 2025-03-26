@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using Unity.Services.Core;
 using Unity.Services.Authentication;
@@ -20,20 +21,27 @@ public class GameStateManager : MonoBehaviour
 
     public async void SaveData()
     {
-        if (textField.text != "" && numberField.text != "")
+        try
         {
-            var playerData = new Dictionary<string, object>{
-                {"Name", textField.text},
-                {"Score", numberField.text}
-            };
-            await CloudSaveService.Instance.Data.Player.SaveAsync(playerData);
-            Debug.Log($"Saved data {string.Join(',', playerData)}");
+            if (textField.text != "" && numberField.text != "")
+            {
+                var playerData = new Dictionary<string, object>{
+                    {"Name", textField.text},
+                    {"Score", numberField.text}
+                };
+                await CloudSaveService.Instance.Data.Player.SaveAsync(playerData);
+                Debug.Log($"Saved data {string.Join(',', playerData)}");
+            }
+            else
+            {
+                return;
+            }
+            OnDataSaved.Invoke();
         }
-        else
+        catch (Exception e)
         {
-            return;
+            throw; // TODO handle exception
         }
-        OnDataSaved.Invoke();
     }
 
     public async void LoadData()
