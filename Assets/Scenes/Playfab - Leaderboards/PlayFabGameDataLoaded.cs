@@ -1,11 +1,18 @@
 using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayFabGameDataLoaded : MonoBehaviour {
 	[SerializeField] private TMP_Text _dataLoaded;
-
+	[SerializeField] private GameObject _authButton; 
+	
 	private void Awake() {
+		if (PlayFabGameState.Instance == null) {
+			_dataLoaded.text = $"In order to load data, you must be logged in. Please return to User Authentication to log in.";
+			_authButton.gameObject.SetActive(true);
+			return;
+		}
 		PlayFabGameState.OnGameStateLoaded += HandleGameStateLoaded;
 		PlayFabGameState.LoadGame();
 	}
@@ -19,4 +26,7 @@ public class PlayFabGameDataLoaded : MonoBehaviour {
 		PlayFabGameState.OnGameStateLoaded -= HandleGameStateLoaded;
 	}
 
+	public void ReturnToAuthentication() {
+		SceneManager.LoadScene("Playfab - User Authentication");
+	}
 }
