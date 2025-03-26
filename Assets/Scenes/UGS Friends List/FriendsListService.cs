@@ -1,16 +1,32 @@
+using TMPro;
+using Unity.Services.Authentication;
+using Unity.Services.Authentication.PlayerAccounts;
+using Unity.Services.Friends;
+using Unity.Services.Friends.Models;
 using UnityEngine;
 
-public class FriendsListService : MonoBehaviour
-{
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+public class FriendsListService : MonoBehaviour {
+	[SerializeField] private GameObject _friendPrefab;
+	[SerializeField] private GameObject _friendsContainer;
+	[SerializeField] private TMP_Text _playerNameContainer;
+	public async void Intialize() {
+		
+		_playerNameContainer.text = AuthenticationService.Instance.PlayerId;
+		
+		// Initialize friends service
+		await FriendsService.Instance.InitializeAsync();
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+		// Start using the Friends SDK functionalities.
+		var friends = FriendsService.Instance.Friends;
+		foreach (var friend in friends) {
+			CreateFriend(friend.Member.Profile.Name);
+		}
+	}
+
+	private void CreateFriend(string friend) {
+		GameObject friendGO = Instantiate(_friendPrefab, _friendsContainer.transform,false);
+		if (friendGO.TryGetComponent(out UGSFriend friendComponent )) {
+			friendComponent.Name = friend;
+		}
+	}
 }
