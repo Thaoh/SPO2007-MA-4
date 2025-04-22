@@ -25,11 +25,11 @@ public class UGSAuthenticator : MonoBehaviour
         StartPlayerAccountsSignInAsync();
     }
 
-    public void SignInAnonymous()
+    public async void SignInAnonymous()
     {
         if (!PlayerAccountService.Instance.IsSignedIn)
         {
-            SignUpAnonymouslyAsync();
+            await SignUpAnonymouslyAsync();
         }
         else
         {
