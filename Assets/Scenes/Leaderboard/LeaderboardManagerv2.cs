@@ -12,8 +12,6 @@ public class LeaderboardManagerv2 : MonoBehaviour
     [SerializeField] private TMP_Text playerName, playerScore, playerRank;
     [SerializeField] private TMP_Text listNames, listScores;
     [SerializeField] private TMP_InputField changeScore;
-    
-
 	
 	private void Awake()
 	{
@@ -45,6 +43,8 @@ public class LeaderboardManagerv2 : MonoBehaviour
     {
         try
         {
+            await LeaderboardsService.Instance.AddPlayerScoreAsync(LeaderboardId, 0);
+            
             var scoresPlayer =
             await LeaderboardsService.Instance.GetPlayerScoreAsync(LeaderboardId);
             
