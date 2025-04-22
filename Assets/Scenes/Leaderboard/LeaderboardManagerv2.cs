@@ -51,21 +51,7 @@ public class LeaderboardManagerv2 : MonoBehaviour
             var scoresResponses = 
             await LeaderboardsService.Instance.GetScoresAsync(LeaderboardId, new GetScoresOptions{ Offset = 0, Limit = 20 });
             
-            string name;
-            
-            name = scoresPlayer.PlayerName;
-            
-            if (name[..^5] == "Player") 
-            {
-                name = scoresPlayer.PlayerName;
-            }
-            
-            else 
-            {
-                name = scoresPlayer.PlayerName[..^5];
-            }
-            
-            playerName.text = name;
+            playerName.text = scoresPlayer.PlayerName;
             playerScore.text = scoresPlayer.Score.ToString("N0");
             playerRank.text = scoresPlayer.Rank + 1 + ". ";
             
@@ -76,17 +62,7 @@ public class LeaderboardManagerv2 : MonoBehaviour
             
             for (int i = 0; i < loopCount; i++)
             {
-                if (scoresResponses.Results[i].PlayerName[..^5] == "Player") 
-                {
-                    name = scoresResponses.Results[i].PlayerName;
-                }
-                
-                else 
-                {
-                    name = scoresResponses.Results[i].PlayerName[..^5];
-                }
-                
-                listNames.text += name + "\n";
+                listNames.text += scoresResponses.Results[i].PlayerName + "\n";
                 listScores.text += scoresResponses.Results[i].Score.ToString("N0") + "\n";
             }
         }
