@@ -1,0 +1,96 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb652780c38f7c54590880ec70605fb8, type: 3}
+  m_Name: TestTimeline
+  m_EditorClassIdentifier: 
+  timelineLength: 180
+  events:
+  - beatPosition: 4
+  - beatPosition: 6
+  - beatPosition: 8
+  - beatPosition: 12
+  - beatPosition: 14
+  - beatPosition: 16
+  - beatPosition: 20
+  - beatPosition: 22
+  - beatPosition: 24
+  - beatPosition: 32
+  - beatPosition: 33
+  - beatPosition: 34
+  - beatPosition: 35
+  - beatPosition: 36
+  - beatPosition: 37
+  - beatPosition: 38
+  - beatPosition: 39
+  - beatPosition: 40
+  - beatPosition: 41
+  - beatPosition: 42
+  - beatPosition: 43
+  - beatPosition: 44
+  - beatPosition: 45
+  - beatPosition: 46
+  - beatPosition: 47
+  - beatPosition: 48
+  - beatPosition: 49
+  - beatPosition: 50
+  - beatPosition: 51
+  - beatPosition: 52
+  - beatPosition: 53
+  - beatPosition: 54
+  - beatPosition: 55
+  - beatPosition: 56
+  - beatPosition: 57
+  - beatPosition: 58
+  - beatPosition: 59
+  - beatPosition: 60
+  - beatPosition: 61
+  - beatPosition: 62
+  - beatPosition: 63
+  - beatPosition: 64
+  - beatPosition: 96
+  - beatPosition: 97
+  - beatPosition: 98
+  - beatPosition: 99.5
+  - beatPosition: 101.5
+  - beatPosition: 102
+  - beatPosition: 102.5
+  - beatPosition: 103
+  - beatPosition: 104
+  - beatPosition: 105
+  - beatPosition: 106
+  - beatPosition: 107.5
+  - beatPosition: 109.5
+  - beatPosition: 110
+  - beatPosition: 110.5
+  - beatPosition: 111
+  - beatPosition: 128
+  - beatPosition: 129
+  - beatPosition: 130
+  - beatPosition: 131.5
+  - beatPosition: 133.5
+  - beatPosition: 134
+  - beatPosition: 134.5
+  - beatPosition: 135
+  - beatPosition: 136
+  - beatPosition: 137
+  - beatPosition: 138
+  - beatPosition: 139.5
+  - beatPosition: 141.5
+  - beatPosition: 142
+  - beatPosition: 142.5
+  - beatPosition: 143
+  - beatPosition: 145
+  - beatPosition: 147
+  - beatPosition: 149
+  - beatPosition: 151
+  - beatPosition: 153
+  - beatPosition: 155
