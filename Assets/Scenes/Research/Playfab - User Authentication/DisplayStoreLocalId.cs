@@ -7,7 +7,7 @@ public class DisplayStoreLocalId : MonoBehaviour {
 
 	bool _storedOnline = false;
 	private void Start() {
-		infoGraphicText.text = $"Local Id: {GameManager.LocalUserID}\n Stored Online: {_storedOnline}";
+		infoGraphicText.text = $"Local Id: {DataStore.LocalUserID}\n Stored Online: {_storedOnline}";
 		PlayFabAuthController.OnUserLoggedIn += UserLoggedInTimeToSave;
 	}
 
@@ -17,14 +17,14 @@ public class DisplayStoreLocalId : MonoBehaviour {
 
 	private void UserLoggedInTimeToSave(LoginResult obj) {
 		PlayFabGameState.OnGameStateSaved += GameStateSaved;
-		PlayFabGameState.SaveGame("LocalUserID", GameManager.LocalUserID);
+		PlayFabGameState.SaveGame("LocalUserID", DataStore.LocalUserID);
 		
 	}
 
 	private void GameStateSaved(bool gameSaveSuccess) {
 		_storedOnline = gameSaveSuccess;
 		Debug.Log($"[DisplayStoreLocalID.GameStateSaved] Game saved: {_storedOnline}");
-		infoGraphicText.text = $"Local Id: {GameManager.LocalUserID}\n Stored Online: {_storedOnline}";
+		infoGraphicText.text = $"Local Id: {DataStore.LocalUserID}\n Stored Online: {_storedOnline}";
 		PlayFabGameState.OnGameStateSaved -= GameStateSaved;
 	}
 }

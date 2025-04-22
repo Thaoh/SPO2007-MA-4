@@ -66,7 +66,7 @@ public class PlayFabAuthController : MonoBehaviour {
 		if (result.InfoResultPayload != null && result.InfoResultPayload.AccountInfo != null) {
 			Debug.Log("User Email: " + result.InfoResultPayload.AccountInfo.PrivateInfo.Email);
 		}
-		GameManager.PlayFabLoginResult = result;
+		DataStore.PlayFabLoginResult = result;
 		OnUserLoggedIn?.Invoke(result);
 
 		StartSceneLoad();
