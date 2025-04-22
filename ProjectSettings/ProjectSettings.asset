@@ -163,7 +163,7 @@ PlayerSettings:
   androidMaxAspectRatio: 2.4
   androidMinAspectRatio: 1
   applicationIdentifier:
-    Android: com.UnityTechnologies.com.unity.template.urpblank
+    Android: no.nord.spo2007
     Standalone: com.Unity-Technologies.com.unity.template.urp-blank
     iPhone: com.Unity-Technologies.com.unity.template.urp-blank
   buildNumber:
@@ -921,11 +921,11 @@ PlayerSettings:
   captureStartupLogs: {}
   activeInputHandler: 2
   windowsGamepadBackendHint: 0
-  cloudProjectId: 8ce40937-64eb-4ec8-851a-34f0df37f9e7
+  cloudProjectId: a7d3f532-4b4f-4174-9979-86ab4c61daa4
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
   projectName: SPO2007 Online Services Implementation
-  organizationId: jonas_unity995
+  organizationId: myrdania
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
