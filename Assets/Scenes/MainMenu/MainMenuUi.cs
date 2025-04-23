@@ -18,7 +18,11 @@ public class MainMenuUi : MonoBehaviour
 
     private void Start()
     {
-        _startGameButton.onClick.AddListener(() => { SceneManager.LoadScene(gameSceneName); });
+        _startGameButton.onClick.AddListener(() =>
+        {
+            Debug.Log("Starting game");
+            SceneManager.LoadScene(gameSceneName);
+        });
     }
 
     private void OnInitalizedServices()
