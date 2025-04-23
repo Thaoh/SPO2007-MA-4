@@ -2,11 +2,14 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
+    public static UnityEvent OnBeatTriggered = new UnityEvent();
+    
     [SerializeField] private float noteDuration = 0.3f; // Duration the Input is "active"
     [SerializeField] private GameObject metronomeStickTarget;
     [SerializeField] private GameObject metroStickPrefab;
@@ -53,6 +56,7 @@ public class GameManager : MonoBehaviour
             }
             else
             {
+                OnBeatTriggered?.Invoke();
                 beats.Remove(beats[i]);
             }
         }
