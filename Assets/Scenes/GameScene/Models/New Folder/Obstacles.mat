@@ -7,16 +7,15 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: LeonSquared
+  m_Name: Obstacles
   m_Shader: {fileID: 4800000, guid: 08269232286954f439aeb7b83af59dff, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _REMOVEDIAG_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
-  m_DoubleSidedGI: 1
+  m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
   disabledShaderPasses: []
@@ -26,10 +25,10 @@ Material:
     m_TexEnvs: []
     m_Ints: []
     m_Floats:
-    - _RemoveDiag: 1
-    - _WireframeVal: 0.029
+    - _RemoveDiag: 0
+    - _WireframeVal: 0.05
     m_Colors:
-    - _BackColor: {r: 0.78355694, g: 0, b: 1, a: 1}
-    - _FrontColor: {r: 1, g: 0, b: 0, a: 1}
+    - _BackColor: {r: 1, g: 0.055545382, b: 0, a: 1}
+    - _FrontColor: {r: 1, g: 1, b: 1, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
