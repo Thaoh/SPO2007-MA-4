@@ -97,9 +97,16 @@ public class MainMenuUi : MonoBehaviour
         _username.text = AuthenticationService.Instance.IsSignedIn ? "Signed In" : "Signed Out";
         if (AuthenticationService.Instance.IsSignedIn)
         {
+            bool isAnonymous = AuthenticationService.Instance?.PlayerInfo?.Identities?.Count == 0;
+            if (isAnonymous)
+            {
+                _username.text += "\n(Anonymous Account)";
+                return;
+            }
+
             _username.text += string.IsNullOrEmpty(AuthenticationService.Instance.PlayerName)
-                ? $"/nID:{AuthenticationService.Instance.PlayerId}"
-                : $"/n{AuthenticationService.Instance.PlayerName}";
+                ? $"\nID:[{AuthenticationService.Instance.PlayerId}]"
+                : $"\n{AuthenticationService.Instance.PlayerName}";
         }
     }
 
