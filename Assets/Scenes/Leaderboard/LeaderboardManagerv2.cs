@@ -9,9 +9,16 @@ public class LeaderboardManagerv2 : MonoBehaviour
     
     public string LeaderboardId = "NoNameGame";
     
+    [Header("Leaderboard Attributes")]
     [SerializeField] private TMP_Text playerName, playerScore, playerRank;
     [SerializeField] private TMP_Text listNames, listScores;
+    
+    [Header("Change Score Attributes")]
     [SerializeField] private TMP_InputField changeScore;
+    
+    [Header("HighScore Attributes")]
+    [SerializeField] private TMP_Text highScoreName, highScoreScore;
+    [SerializeField] private TMP_Text highScoreplayerName, highScoreplayerScore, highScoreplayerRank;
 	
 	private void Awake()
 	{
@@ -25,6 +32,7 @@ public class LeaderboardManagerv2 : MonoBehaviour
 		}
 	}
 	
+	//Call this when the round ends, will update score to better one if better score.
 	public async void SetPlayerScore(int score) 
     {
         try
@@ -39,6 +47,7 @@ public class LeaderboardManagerv2 : MonoBehaviour
         }
     }
 	
+	//Call this when viewing leaderboard.
 	public async void GetScores()
     {
         try
@@ -73,9 +82,35 @@ public class LeaderboardManagerv2 : MonoBehaviour
         }
     }
     
+    //For changing score from an inputfield
     public void ChangeScore() 
     {
         int.TryParse(changeScore.text, out int result); 
         SetPlayerScore(result);
+    }
+    
+    //Call this when entering a round to display best rank and your own best rank.
+    public async void GetHighScore() 
+    {
+        var scoresPlayer =
+        await LeaderboardsService.Instance.GetPlayerScoreAsync(LeaderboardId);
+        
+        var scoresResponses = 
+        await LeaderboardsService.Instance.GetScoresAsync(LeaderboardId, new GetScoresOptions{ Offset = 0, Limit = 1 });
+        
+        highScoreplayerName.text = scoresPlayer.PlayerName;
+        highScoreplayerScore.text = scoresPlayer.Score.ToString("N0");
+        highScoreplayerRank.text = scoresPlayer.Rank + 1 + ". ";
+        
+        highScoreName.text = scoresResponses.Results[0].PlayerName;
+        highScoreScore.text = scoresResponses.Results[0].Score.ToString("N0");
+    }
+    
+    public async void GetLeaderboard() 
+    {
+        var scoresResponses = 
+        await LeaderboardsService.Instance.GetScoresAsync(LeaderboardId, new GetScoresOptions{ Offset = 0, Limit = 20 });
+        
+        DataStore.Leaderboard = scoresResponses;
     }
 }
