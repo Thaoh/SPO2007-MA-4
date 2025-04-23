@@ -10,15 +10,21 @@ public class LeaderboardManagerv2 : MonoBehaviour
     public string LeaderboardId = "NoNameGame";
     
     [Header("Leaderboard Attributes")]
-    [SerializeField] private TMP_Text playerName, playerScore, playerRank;
-    [SerializeField] private TMP_Text listNames, listScores;
+    [SerializeField] private TMP_Text playerName;
+    [SerializeField] private TMP_Text playerScore;
+    [SerializeField] private TMP_Text playerRank;
+    [SerializeField] private TMP_Text listNames;
+    [SerializeField] private TMP_Text listScores;
     
     [Header("Change Score Attributes")]
     [SerializeField] private TMP_InputField changeScore;
     
     [Header("HighScore Attributes")]
-    [SerializeField] private TMP_Text highScoreName, highScoreScore;
-    [SerializeField] private TMP_Text highScoreplayerName, highScoreplayerScore, highScoreplayerRank;
+    [SerializeField] private TMP_Text highScoreName;
+    [SerializeField] private TMP_Text highScoreScore;
+    [SerializeField] private TMP_Text highScoreplayerName;
+    [SerializeField] private TMP_Text highScoreplayerScore;
+    [SerializeField] private TMP_Text highScoreplayerRank;
 	
 	private void Awake()
 	{
@@ -32,7 +38,7 @@ public class LeaderboardManagerv2 : MonoBehaviour
 		}
 	}
 	
-	//Call this when the round ends, will update score to better one if better score.
+	//Will update personal score if the score is better.
 	public async void SetPlayerScore(int score) 
     {
         try
@@ -47,7 +53,7 @@ public class LeaderboardManagerv2 : MonoBehaviour
         }
     }
 	
-	//Call this when viewing leaderboard.
+	//For filling leaderboard.
 	public async void GetScores()
     {
         try
@@ -89,7 +95,7 @@ public class LeaderboardManagerv2 : MonoBehaviour
         SetPlayerScore(result);
     }
     
-    //Call this when entering a round to display best rank and your own best rank.
+    //Displays best rank and your own best rank.
     public async void GetHighScore() 
     {
         var scoresPlayer =
