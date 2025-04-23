@@ -89,7 +89,13 @@ public class MainMenuUi : MonoBehaviour
     {
         if (UnityServices.State == ServicesInitializationState.Uninitialized)
         {
-            _username.text = "UnityServices is not initialized.";
+            _username.text = "Services not initialized.";
+            return;
+        }
+
+        if (AuthenticationService.Instance == null)
+        {
+            _username.text = "No Authenticator available.";
             return;
         }
 
@@ -104,8 +110,8 @@ public class MainMenuUi : MonoBehaviour
                 return;
             }
 
-            _username.text += string.IsNullOrEmpty(AuthenticationService.Instance.PlayerName)
-                ? $"\nID:[{AuthenticationService.Instance.PlayerId}]"
+            _username.text += string.IsNullOrEmpty(AuthenticationService.Instance?.PlayerName)
+                ? $"\nID:[{AuthenticationService.Instance?.PlayerId ?? "No ID"}]"
                 : $"\n{AuthenticationService.Instance.PlayerName}";
         }
     }
