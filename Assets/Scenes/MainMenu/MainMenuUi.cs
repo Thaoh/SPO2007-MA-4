@@ -1,0 +1,110 @@
+using System;
+using TMPro;
+using Unity.Services.Authentication;
+using Unity.Services.Authentication.PlayerAccounts;
+using Unity.Services.Core;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+
+public class MainMenuUi : MonoBehaviour
+{
+    [Header("Data")] [SerializeField] private string gameSceneName = "GameScene";
+
+    [Header("UI Element Refferences")] [SerializeField]
+    private Button _startGameButton;
+
+    [SerializeField] private TMP_Text _username;
+
+    private void Start()
+    {
+        _startGameButton.onClick.AddListener(() => { SceneManager.LoadScene(gameSceneName); });
+    }
+
+    private void OnInitalizedServices()
+    {
+        UnityServices.Initialized -= OnInitalizedServices;
+        // Make sure ui is updated when signin state changes
+        AuthenticationService.Instance.SignedIn += OnSignIn;
+        AuthenticationService.Instance.SignedOut += OnSignOut;
+        AuthenticationService.Instance.SignInFailed += OnSignInFailed;
+        AuthenticationService.Instance.Expired += Expired;
+        AuthenticationService.Instance.SignInCodeExpired += Expired;
+        RefreshUi();
+    }
+
+    void OnEnable()
+    {
+        if (UnityServices.State == ServicesInitializationState.Initialized)
+        {
+            OnInitalizedServices();
+        }
+        else
+        {
+            UnityServices.Initialized += OnInitalizedServices;
+        }
+
+        RefreshUi();
+    }
+
+    private void OnDisable()
+    {
+        UnityServices.Initialized -= OnInitalizedServices;
+        if (AuthenticationService.Instance != null)
+        {
+            AuthenticationService.Instance.SignedIn -= OnSignIn;
+            AuthenticationService.Instance.SignedOut -= OnSignOut;
+            AuthenticationService.Instance.SignInFailed -= OnSignInFailed;
+            AuthenticationService.Instance.Expired -= Expired;
+            AuthenticationService.Instance.SignInCodeExpired -= Expired;
+        }
+    }
+
+    private void Expired()
+    {
+        RefreshUi();
+    }
+
+    private void OnSignInFailed(RequestFailedException obj)
+    {
+        RefreshUi();
+    }
+
+    private void OnSignIn()
+    {
+        RefreshUi();
+    }
+
+    private void OnSignOut()
+    {
+        RefreshUi();
+    }
+
+    void RefreshUi()
+    {
+        UpdateUsername();
+    }
+
+    private void UpdateUsername()
+    {
+        if (UnityServices.State == ServicesInitializationState.Uninitialized)
+        {
+            _username.text = "UnityServices is not initialized.";
+            return;
+        }
+
+        _username.text = "";
+        _username.text = AuthenticationService.Instance.IsSignedIn ? "Signed In" : "Signed Out";
+        if (AuthenticationService.Instance.IsSignedIn)
+        {
+            _username.text += string.IsNullOrEmpty(AuthenticationService.Instance.PlayerName)
+                ? $"/nID:{AuthenticationService.Instance.PlayerId}"
+                : $"/n{AuthenticationService.Instance.PlayerName}";
+        }
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+    }
+}
