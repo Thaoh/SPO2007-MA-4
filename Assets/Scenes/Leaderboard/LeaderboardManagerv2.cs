@@ -1,6 +1,8 @@
 using System;
+using System.Threading.Tasks;
 using TMPro;
 using Unity.Services.Leaderboards;
+using Unity.Services.Leaderboards.Models;
 using UnityEngine;
 
 public class LeaderboardManagerv2 : MonoBehaviour
@@ -112,11 +114,10 @@ public class LeaderboardManagerv2 : MonoBehaviour
         highScoreScore.text = scoresResponses.Results[0].Score.ToString("N0");
     }
     
-    public async void GetLeaderboard() 
+    public async Task<LeaderboardScoresPage> GetLeaderboard() 
     {
-        var scoresResponses = 
-        await LeaderboardsService.Instance.GetScoresAsync(LeaderboardId, new GetScoresOptions{ Offset = 0, Limit = 20 });
+        var scoresResponses = await LeaderboardsService.Instance.GetScoresAsync(LeaderboardId, new GetScoresOptions{ Offset = 0, Limit = 20 });
         
-        DataStore.Leaderboard = scoresResponses;
-    }
+		return scoresResponses;
+	}
 }
