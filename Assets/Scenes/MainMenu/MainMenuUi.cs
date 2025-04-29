@@ -9,10 +9,15 @@ using UnityEngine.UI;
 
 public class MainMenuUi : MonoBehaviour
 {
-    [Header("Data")] [SerializeField] private string gameSceneName = "GameScene";
+    [Header("Data")] 
+    [SerializeField] private string gameSceneName = "GameScene";
+    [SerializeField] private string challangeSceneName = "Challange";
+    [SerializeField] private string scoreBoardSceneName = "ScoreBoard";
 
-    [Header("UI Element Refferences")] [SerializeField]
-    private Button _startGameButton;
+    [Header("UI Element Refferences")] 
+    [SerializeField] private Button _startGameButton;
+    [SerializeField] private Button _challengeButton;
+    [SerializeField] private Button _scoreBoardButton;
 
     [SerializeField] private TMP_Text _username;
 
@@ -22,6 +27,16 @@ public class MainMenuUi : MonoBehaviour
         {
             Debug.Log("Starting game");
             SceneManager.LoadScene(gameSceneName);
+        });
+        _scoreBoardButton.onClick.AddListener(() =>
+        {
+
+            SceneManager.LoadScene(scoreBoardSceneName);
+        });        
+        _challengeButton.onClick.AddListener(() =>
+        {
+
+            SceneManager.LoadScene(challangeSceneName);
         });
     }
 
