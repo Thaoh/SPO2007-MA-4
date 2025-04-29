@@ -1,3 +1,5 @@
+using System;
+using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,6 +8,8 @@ using UnityEngine.Events;
 public class UGSFriend : MonoBehaviour {
 	public UnityAction<string> OnFriendChallengeRequest = delegate { };
 	public UnityAction<string> OnBefriendPerson = delegate { };
+	public UnityAction<string> OnUnfriend = delegate { };
+	public UnityAction<string> OnCancelFriendRequest = delegate { };
 	
 	[SerializeField] private TMP_Text _friendNameElement;
 	[SerializeField] private Button _interactionButton;
@@ -14,7 +18,8 @@ public class UGSFriend : MonoBehaviour {
 	[SerializeField] private TMP_Text _challengeButtonText;
 	
 	private string _friendName;
-
+	private FriendMode _friendMode;
+	
 	public string Name {
 		get {
 			return _friendName;
@@ -28,6 +33,7 @@ public class UGSFriend : MonoBehaviour {
 	public string PlayerID { get; set; }
 
 	public void SetFriendMode(FriendMode mode) {
+		_friendMode = mode;
 		switch (mode) {
 			case FriendMode.Friends:
 				_interactionButton.gameObject.SetActive(true);
@@ -36,14 +42,19 @@ public class UGSFriend : MonoBehaviour {
 				break;
 			case FriendMode.Requested:
 				_interactionButton.gameObject.SetActive(true);
-				_interactionButtonText.text = "Requested";
+				_interactionButtonText.text = "Delete Friend Request";
+				_challengeButton.gameObject.SetActive(false);
+				break;
+			case FriendMode.Received:
+				_interactionButton.gameObject.SetActive(true);
+				_interactionButtonText.text = "Accept Request";
 				_challengeButton.gameObject.SetActive(false);
 				break;
 			default:
 			case FriendMode.None:
 			case FriendMode.NotFriends:
 				_interactionButton.gameObject.SetActive(true);
-				_interactionButtonText.text = "Befriend";
+				_interactionButtonText.text = "Add Friend";
 				_challengeButton.gameObject.SetActive(false);
 				break;
 		}
@@ -54,7 +65,20 @@ public class UGSFriend : MonoBehaviour {
 	}
 	
 	public void FriendRequest() {
-		OnBefriendPerson?.Invoke(PlayerID);
+		switch ( _friendMode ) {
+			case FriendMode.Friends:
+				OnUnfriend?.Invoke(PlayerID);
+				break;
+			case FriendMode.NotFriends:
+				OnBefriendPerson?.Invoke(PlayerID);
+				break;
+			case FriendMode.Requested:
+				OnCancelFriendRequest?.Invoke(PlayerID);
+				break;
+			case FriendMode.Received:
+				OnBefriendPerson?.Invoke(PlayerID);
+				break;
+		}
 	}
 }
 
@@ -62,5 +86,6 @@ public enum FriendMode {
 	None,
 	Friends,
 	NotFriends,
-	Requested
+	Requested,
+	Received
 }
