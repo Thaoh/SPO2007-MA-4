@@ -20,6 +20,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float rotationSpeed = 18f;
     private float targetRotation = 0f, currentRotation = 0f;
 
+    [SerializeField] private Animator playerAnim;
+
 
     private AudioSource myAudioSource;
     private bool isClickable = false;
@@ -86,10 +88,12 @@ public class GameManager : MonoBehaviour
             if (Input.mousePosition.x >= 700)
             {
                 targetRotation += 45f;
+                playerAnim.SetTrigger("TurnRight");
             }
             else
             {
                 targetRotation -= 45f;
+                playerAnim.SetTrigger("TurnLeft");
             }
             isClickable = false;
         }
