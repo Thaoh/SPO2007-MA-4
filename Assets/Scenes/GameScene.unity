@@ -11429,7 +11429,7 @@ MonoBehaviour:
     defaultSize: 0.026
   BeatDecaySpeed: 3
   beatSize: 0.1
-  delayInMilliseconds: 100
+  delayInMilliseconds: 20
 --- !u!4 &518835576
 Transform:
   m_ObjectHideFlags: 0
@@ -17459,6 +17459,7 @@ MonoBehaviour:
   camObject: {fileID: 1880985620489695366}
   camPivotObject: {fileID: 8718158108325908505}
   mapHalo: {fileID: 1039446572}
+  postAnim: {fileID: 4256331679010146597}
   mapMoveSpeed: -10
   rotationSpeed: 18
   playerAnim: {fileID: 2623446284715552734}
@@ -18699,6 +18700,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1939715399366596077, guid: 10284c946780f5a4b8e1cc030b122e2c, type: 3}
+      propertyPath: weight
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8446710996982699682, guid: 10284c946780f5a4b8e1cc030b122e2c, type: 3}
       propertyPath: m_Name
       value: CamAnchor
@@ -18706,8 +18711,38 @@ PrefabInstance:
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 4910705024892075614, guid: 10284c946780f5a4b8e1cc030b122e2c, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4256331679010146597}
   m_SourcePrefab: {fileID: 100100000, guid: 10284c946780f5a4b8e1cc030b122e2c, type: 3}
+--- !u!1 &4256331679010146596 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4910705024892075614, guid: 10284c946780f5a4b8e1cc030b122e2c, type: 3}
+  m_PrefabInstance: {fileID: 4256331679010146595}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &4256331679010146597
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4256331679010146596}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: fcabf3ac81d22a14cb0e788691150cc3, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &8718158108325908505 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8446710996982699682, guid: 10284c946780f5a4b8e1cc030b122e2c, type: 3}

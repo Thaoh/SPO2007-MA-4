@@ -14,6 +14,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject metronomeStickTarget;
     [SerializeField] private GameObject metroStickPrefab;
     [SerializeField] private GameObject canvasObject , camObject, camPivotObject, mapHalo;
+    [SerializeField] private Animator postAnim;
     [SerializeField] private float mapMoveSpeed = 2f;
     private ScoreManager scoremanager;
 
@@ -85,6 +86,7 @@ public class GameManager : MonoBehaviour
         {
             beats.Remove(beats[0]);
             scoremanager.ScoreChange(5);
+            postAnim.SetTrigger("Hit");
             if (Input.mousePosition.x >= 700)
             {
                 targetRotation += 45f;
