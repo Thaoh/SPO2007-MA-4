@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Services.Leaderboards;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -22,6 +23,8 @@ public class GameManager : MonoBehaviour
     private float targetRotation = 0f, currentRotation = 0f;
 
     [SerializeField] private Animator playerAnim;
+    
+    private float currentTime = 0;
 
 
     private AudioSource myAudioSource;
@@ -38,11 +41,25 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         myAudioSource = GetComponent<AudioSource>();
+        currentTime = 200;
+    }
+
+    [SerializeField] private GameObject endScreen;
+
+    private async void GameOver()
+    {
+        Time.timeScale = 0;
+        await LeaderboardsService.Instance.AddPlayerScoreAsync("NoNameGame", (int)scoremanager.Score);
     }
     
 
     void Update()
     {
+        currentTime -= Time.deltaTime;
+        if (currentTime <= 0)
+        {
+            GameOver();
+        }
         for (int i = 0; i < beats.Count; i++)
         {
             if (beats[i] > -noteDuration)
