@@ -155,8 +155,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 48.2}
+  m_AnchoredPosition: {x: 0, y: 16}
+  m_SizeDelta: {x: -32, y: 48.2}
   m_Pivot: {x: 0.5, y: 0}
 --- !u!114 &222818289
 MonoBehaviour:
@@ -613,8 +613,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: 0, y: 30}
-  m_SizeDelta: {x: 0, y: -60}
+  m_AnchoredPosition: {x: 0, y: 45}
+  m_SizeDelta: {x: 0, y: -90}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &332591136
 MonoBehaviour:
@@ -1100,7 +1100,7 @@ MonoBehaviour:
   m_ReferencePixelsPerUnit: 100
   m_ScaleFactor: 1
   m_ReferenceResolution: {x: 375, y: 667}
-  m_ScreenMatchMode: 0
+  m_ScreenMatchMode: 1
   m_MatchWidthOrHeight: 1
   m_PhysicalUnit: 3
   m_FallbackScreenDPI: 96
@@ -1327,7 +1327,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0, b: 0, a: 0.6784314}
+  m_Color: {r: 0, g: 0, b: 0, a: 0.98039216}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -1390,7 +1390,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: -40, y: -39.999977}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1204035028
 MonoBehaviour:
@@ -1638,7 +1638,14 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Scoreboard
+  m_text: "Leaderboard:\n<font-weight=\"800\"><size=70%>1<size=70%>. <color=\"yellow\">3124P<font-weight=\"400\"><size=70%>
+    <color=\"white\">OrnateKnownCoat#6  <font-weight=\"900\">(You)<font-weight=\"400\">\n<font-weight=\"800\"><size=70%>2<size=70%>.
+    <color=\"yellow\">77P<font-weight=\"400\"><size=70%> <color=\"white\">Player#1560
+    \n<font-weight=\"800\"><size=70%>3<size=70%>. <color=\"yellow\">10P<font-weight=\"400\"><size=70%>
+    <color=\"white\">LavenderLaughingAccordion#3 \n<font-weight=\"800\"><size=70%>4<size=70%>.
+    <color=\"yellow\">8P<font-weight=\"400\"><size=70%> <color=\"white\">VagueRequiredSpoon#3
+    \n<font-weight=\"800\"><size=70%>5<size=70%>. <color=\"yellow\">0P<font-weight=\"400\"><size=70%>
+    <color=\"white\">ExtraBurningViola#7 \n"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
@@ -1683,7 +1690,7 @@ MonoBehaviour:
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
   m_wordWrappingRatios: 0.4
-  m_overflowMode: 0
+  m_overflowMode: 1
   m_linkedTextComponent: {fileID: 0}
   parentLinkedComponent: {fileID: 0}
   m_enableKerning: 0
@@ -1703,7 +1710,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 16, y: 16, z: 16, w: 16}
+  m_margin: {x: 16, y: 48.82, z: 16, w: 16}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
