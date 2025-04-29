@@ -13,6 +13,7 @@ public class UGSAuthenticator : MonoBehaviour
         {
             await UnityServices.InitializeAsync();
             PlayerAccountService.Instance.SignedIn += SignInWithUnityAuth;
+            SignInAnonymous();
         }
         catch (Exception e)
         {
