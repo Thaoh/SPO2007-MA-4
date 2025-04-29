@@ -408,7 +408,7 @@ MonoBehaviour:
   m_IsGlobal: 1
   priority: 0
   blendDistance: 0
-  weight: 0.691
+  weight: 1
   sharedProfile: {fileID: 11400000, guid: 26c8568bfec2c92458bad853d4ac8949, type: 2}
 --- !u!4 &241973268
 Transform:
@@ -833,7 +833,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gameSceneName: GameScene
+  leaderBoardScene: Leaderboard
+  challangeScene: Challenge
   _startGameButton: {fileID: 222818289}
+  _leaderboardButton: {fileID: 1831741916}
+  _challengeButton: {fileID: 1053150795}
   _username: {fileID: 155288243}
 --- !u!1 &659475782
 GameObject:
