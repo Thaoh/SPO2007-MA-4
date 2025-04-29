@@ -5,7 +5,7 @@ using Unity.Services.Authentication;
 using Unity.Services.Friends;
 using Unity.Services.Friends.Exceptions;
 using Unity.Services.Leaderboards.Models;
-using UnityEditor.VersionControl;
+//using UnityEditor.VersionControl;
 using UnityEngine;
 using Task = System.Threading.Tasks.Task;
 using Newtonsoft.Json;
@@ -55,8 +55,8 @@ public class FriendsListService : MonoBehaviour {
 		//friendsServiceInternal.MessageReceived -= OnMessageReceived;
 		
 		ClearFriendsListContainer();
-	}
-
+	} 
+	/* 
     void OnMessageReceived(Message message) {
         Debug.Log($"[Message Received] Received a raw message object: {message}");
         Debug.Log($"[Message Received] Type of the raw message object: {message.GetType()}");
@@ -111,7 +111,7 @@ public class FriendsListService : MonoBehaviour {
         {
             Debug.LogError($"[Message Received] Error serializing or processing raw message: {ex.Message}");
         }
-    }
+    } */
 
 	private async Task UpdateFriendsList() {
 		ClearFriendsListContainer();
