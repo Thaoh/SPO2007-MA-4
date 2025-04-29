@@ -1,0 +1,13 @@
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\WishHappyNewYear.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\WishHappyNewYear.deps.json
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\WishHappyNewYear.pdb
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Unity.Services.CloudCode.Apis.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Unity.Services.CloudCode.Core.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Google.Protobuf.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Grpc.Core.Api.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Grpc.Net.Client.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Grpc.Net.Common.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\JsonSubTypes.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\User\AppData\Local\Temp\WishHappyNewYear\module-compilation-cross-platform\Newtonsoft.Json.dll
