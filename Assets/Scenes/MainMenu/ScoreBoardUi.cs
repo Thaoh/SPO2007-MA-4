@@ -51,8 +51,8 @@ public class ScoreBoardUi : MonoBehaviour
         string display = "Leaderboard:\n";
         foreach (var entry in response.Results)
         {
-            string youTag = entry.PlayerId == AuthenticationService.Instance.PlayerId ? " (You)" : "";
-            display += $"{entry.Rank+1}. {entry.Score}P - {entry.PlayerName ?? ("ID" + entry.PlayerId) ?? "Anonymous"} - {youTag}\n";
+            string youTag = entry.PlayerId == AuthenticationService.Instance.PlayerId ? " <font-weight=\"900\">(You)<font-weight=\"400\">" : "";
+            display += $"<font-weight=\"800\"><size=70%>{entry.Rank+1}<size=70%>. <color=\"yellow\">{entry.Score}P<font-weight=\"400\"><size=70%> <color=\"white\">{entry.PlayerName ?? ("ID" + entry.PlayerId) ?? "Anonymous"} {youTag}\n";
         }
 
         scoreBoard.text = display;
