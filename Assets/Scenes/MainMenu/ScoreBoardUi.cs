@@ -52,7 +52,7 @@ public class ScoreBoardUi : MonoBehaviour
         foreach (var entry in response.Results)
         {
             string youTag = entry.PlayerId == AuthenticationService.Instance.PlayerId ? " (You)" : "";
-            display += $"{entry.Rank},{entry.Tier}, {entry.PlayerName ?? "Anonymous"} - {entry.Score}{youTag}\n";
+            display += $"{entry.Rank+1}. {entry.Score}P - {entry.PlayerName ?? ("ID" + entry.PlayerId) ?? "Anonymous"} - {youTag}\n";
         }
 
         scoreBoard.text = display;
