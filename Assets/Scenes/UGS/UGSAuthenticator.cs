@@ -7,137 +7,163 @@ using UnityEngine;
 
 public class UGSAuthenticator : MonoBehaviour
 {
+    // Define a void Action for the authentication success event
+    public static event Action OnAuthFinishedSuccess;
+    
+    // Static fields to ensure state is shared across all instances
+    private static bool _isInitialized = false;
+    private static bool _authInProgress = false;
+    private static readonly object _lockObject = new object();
+    
+    // Add a delay between authentication attempts
+    private const int AUTH_RETRY_DELAY_MS = 500;
+    private const int MAX_AUTH_ATTEMPTS = 3;
+
     private async void Start()
     {
-        try
+        // Initialize services if needed
+        if (!_isInitialized)
         {
-            await UnityServices.InitializeAsync();
-            PlayerAccountService.Instance.SignedIn += SignInWithUnityAuth;
-            SignInAnonymous();
+            try
+            {
+                Debug.Log("[Authentication] Initializing Unity Services");
+                await UnityServices.InitializeAsync();
+                _isInitialized = true;
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"[Authentication] Unity Services initialization failed: {e.Message}");
+                return;
+            }
         }
-        catch (Exception e)
-        {
-            throw; // TODO handle exception
-        }
+        
+        // Try to authenticate
+        await AttemptAuthentication();
     }
 
-    public void SignIn()
+    private async Task AttemptAuthentication()
     {
-        StartPlayerAccountsSignInAsync();
-    }
-
-    public async void SignInAnonymous()
-    {
-        if (!PlayerAccountService.Instance.IsSignedIn)
+        // First check if we're already signed in
+        if (AuthenticationService.Instance.IsSignedIn)
         {
-            await SignUpAnonymouslyAsync();
-        }
-        else
-        {
-            Debug.Log(PlayerAccountService.Instance.AccessToken);
-        }
-    }
-    
-    async void StartPlayerAccountsSignInAsync()
-    {
-        if (PlayerAccountService.Instance.IsSignedIn)
-        {
-            // If the player is already signed into Unity Player Accounts, proceed directly to the Unity Authentication sign-in.
-            SignInWithUnityAuth();
+            Debug.Log($"[Authentication] Already signed in as {AuthenticationService.Instance.PlayerName} (ID: {AuthenticationService.Instance.PlayerId})");
+            TriggerAuthSuccess();
             return;
         }
-
-        try
+        
+        // Don't attempt to authenticate if another authentication is in progress
+        if (IsAuthInProgress())
         {
-            // This will open the system browser and prompt the user to sign in to Unity Player Accounts
-            await PlayerAccountService.Instance.StartSignInAsync();
+            Debug.Log("[Authentication] Authentication already in progress, skipping");
+            return;
         }
-        catch (PlayerAccountsException ex) {
-            // Compare error code to PlayerAccountsErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
+        
+        // Try anonymous authentication with retries
+        await TryAnonymousAuthentication();
+    }
+    
+    // Safely trigger the authentication success event on the main thread
+    private void TriggerAuthSuccess()
+    {
+        // Make sure we're on the main thread for UI updates
+        if (OnAuthFinishedSuccess != null)
         {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
+            OnAuthFinishedSuccess.Invoke();
         }
     }
     
-    async void SignInWithUnityAuth()
+    private bool IsAuthInProgress()
     {
-        try
+        lock (_lockObject)
         {
-            await AuthenticationService.Instance.SignInWithUnityAsync(PlayerAccountService.Instance.AccessToken);
-            Debug.Log("SignIn is successful.");
-        }
-        catch (AuthenticationException ex)
-        {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (Exception e)
-        {
-            throw; // TODO handle exception
+            return _authInProgress;
         }
     }
     
-    async Task LinkWithUnityAsync(string accessToken)
+    private void SetAuthInProgress(bool inProgress)
     {
-        try
+        lock (_lockObject)
         {
-            await AuthenticationService.Instance.LinkWithUnityAsync(accessToken);
-            Debug.Log("Link is successful.");
-        }
-        catch (AuthenticationException ex) when (ex.ErrorCode == AuthenticationErrorCodes.AccountAlreadyLinked)
-        {
-            // Prompt the player with an error message.
-            Debug.LogError("This user is already linked with another account. Log in instead.");
-        }
-        catch (AuthenticationException ex)
-        {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
+            _authInProgress = inProgress;
         }
     }
-    
-    async Task SignUpAnonymouslyAsync()
+
+    private async Task TryAnonymousAuthentication()
     {
+        // Set authentication in progress
+        SetAuthInProgress(true);
+        
         try
         {
-            await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            Debug.Log("Sign in anonymously succeeded!");
-
-            // Shows how to get the playerID
-            Debug.Log($"PlayerID: {AuthenticationService.Instance.PlayerId}");
-
+            // Try multiple times with delays between attempts
+            for (int attempt = 1; attempt <= MAX_AUTH_ATTEMPTS; attempt++)
+            {
+                try
+                {
+                    // Wait a moment before trying again (except first attempt)
+                    if (attempt > 1)
+                    {
+                        Debug.Log($"[Authentication] Retrying authentication (attempt {attempt}/{MAX_AUTH_ATTEMPTS})");
+                        await Task.Delay(AUTH_RETRY_DELAY_MS);
+                    }
+                    
+                    // Check again if we're signed in before attempting
+                    if (AuthenticationService.Instance.IsSignedIn)
+                    {
+                        Debug.Log("[Authentication] Successfully signed in");
+                        TriggerAuthSuccess();
+                        return;
+                    }
+                    
+                    Debug.Log("[Authentication] Attempting anonymous sign-in");
+                    await AuthenticationService.Instance.SignInAnonymouslyAsync();
+                    
+                    Debug.Log($"[Authentication] Successfully signed in as {AuthenticationService.Instance.PlayerName} (ID: {AuthenticationService.Instance.PlayerId})");
+                    TriggerAuthSuccess();
+                    return;
+                }
+                catch (AuthenticationException ex) when (ex.Message.Contains("already signing in"))
+                {
+                    // If we get the "already signing in" error, wait and then check if we're signed in
+                    Debug.Log("[Authentication] Sign-in already in progress, waiting...");
+                    await Task.Delay(AUTH_RETRY_DELAY_MS);
+                    
+                    // Check if sign-in completed while we were waiting
+                    if (AuthenticationService.Instance.IsSignedIn)
+                    {
+                        Debug.Log("[Authentication] Successfully signed in after waiting");
+                        TriggerAuthSuccess();
+                        return;
+                    }
+                    
+                    // If we've tried enough times, rethrow
+                    if (attempt == MAX_AUTH_ATTEMPTS)
+                    {
+                        throw;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.LogError($"[Authentication] Error during attempt {attempt}: {ex.Message}");
+                    
+                    // If we've tried enough times, rethrow
+                    if (attempt == MAX_AUTH_ATTEMPTS)
+                    {
+                        throw;
+                    }
+                }
+            }
         }
-        catch (AuthenticationException ex)
+        finally
         {
-            // Compare error code to AuthenticationErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
+            // Always reset authentication status when done
+            SetAuthInProgress(false);
         }
-        catch (RequestFailedException ex)
-        {
-            // Compare error code to CommonErrorCodes
-            // Notify the player with the proper error message
-            Debug.LogException(ex);
-        }
+    }
+
+    // Public method for manual sign-in button
+    public void SignIn()
+    {
+        _ = AttemptAuthentication();
     }
 }
