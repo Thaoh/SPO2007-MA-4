@@ -12,8 +12,8 @@ namespace CloudCode
 {
     public class CloudCodePushExample : MonoBehaviour
     {
-        
 
+        [SerializeField] private double notifDelay = 0.004d;
         [SerializeField] TextMeshProUGUI textMeshProUGUI;
 
         public static string message = string.Empty;
@@ -45,6 +45,8 @@ namespace CloudCode
         async void Subscribe()
         {
             Debug.Log("sub");
+            AndroidNotifcations.RequestPermission();
+            AndroidNotifcations.RegisterNotificationChannel();
             await SubscribeToProjectMessages();
         }
 
@@ -59,6 +61,7 @@ namespace CloudCode
                 Debug.Log($"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
                 textMeshProUGUI.text = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK") + "\n" +
                 $"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
+
                 message = @event.Message;
                 TriggerMessageRecieved();
             };
@@ -79,7 +82,9 @@ namespace CloudCode
             };
             return CloudCodeService.Instance.SubscribeToProjectMessagesAsync(callbacks);
         }
-
+        private void OnApplicationFocus(bool focus)
+        {
+        }
 
         private void TriggerMessageRecieved()
         {
@@ -88,6 +93,8 @@ namespace CloudCode
             {
                 OnMessageRecieved.Invoke();
             }
+
+            AndroidNotifcations.SendNotification("Beat The Tunnel", message, notifDelay);
         }
     }
 
