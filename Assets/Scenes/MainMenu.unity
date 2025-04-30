@@ -835,7 +835,7 @@ MonoBehaviour:
   gameSceneName: GameScene
   challengeSceneName: Challenge
   scoreBoardSceneName: ScoreBoard
-  mainMenuCanvas: {fileID: 0}
+  mainMenuCanvas: {fileID: 834922263}
   _startGameButton: {fileID: 222818289}
   _challengeButton: {fileID: 1053150795}
   _scoreBoardButton: {fileID: 1831741916}
