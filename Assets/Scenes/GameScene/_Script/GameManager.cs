@@ -40,23 +40,26 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         myAudioSource = GetComponent<AudioSource>();
-        currentTime = 200;
+        currentTime = 94;
     }
 
-    [SerializeField] private GameObject endScreen;
+    [SerializeField] private GameOverController gameOverController;
 
-    private async void GameOver()
+    private void GameOver()
     {
         Time.timeScale = 0;
-        await LeaderboardsService.Instance.AddPlayerScoreAsync("NoNameGame", (int)scoremanager.Score);
+        gameOverController.EndGame(scoremanager.Score);
     }
+
+    private bool isOver = false;
     
 
     void Update()
     {
         currentTime -= Time.deltaTime;
-        if (currentTime <= 0)
+        if (currentTime <= 0 && !isOver)
         {
+            isOver = true;
             GameOver();
         }
         for (int i = 0; i < beats.Count; i++)
@@ -100,6 +103,7 @@ public class GameManager : MonoBehaviour
     {
         if (isClickable)
         {
+            OnBeatTriggered?.Invoke();
             beats.Remove(beats[0]);
             scoremanager.ScoreChange(5);
             postAnim.SetTrigger("Hit");
