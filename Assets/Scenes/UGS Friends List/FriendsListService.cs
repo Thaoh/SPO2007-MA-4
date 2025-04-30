@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.Services.Authentication;
 using Unity.Services.Friends;
@@ -17,6 +18,7 @@ public class FriendsListService : MonoBehaviour {
 	[SerializeField] private TMP_Text _playerNameContainer;
 
 	private float _nextInitializationTime;
+	private readonly Dictionary<string, UGSFriend> _friendElement = new();
 	private readonly Dictionary<string, Relationship> _requestSent = new();
 	private readonly Dictionary<string, Relationship> _friendRelationships = new();
 	private IReadOnlyList<Relationship> _friends;
@@ -107,10 +109,11 @@ public class FriendsListService : MonoBehaviour {
 		foreach ( Unity.Services.Friends.Models.Relationship relationship in _friendRequestsIncoming ) {
 			CreateFriendEntry( relationship.Member.Profile.Name, FriendMode.Received, relationship.Member.Id );
 		}
-
+		
+		_friendElement.Clear();
 		foreach ( var friend in _friends ) {
 			Debug.Log( $"[Friends List] Friendship established with {friend.Member.Profile.Name} id: {friend.Member.Id}, ID: {friend.Id}." );
-			CreateFriendEntry( friend.Member.Id, FriendMode.Friends, friend.Member.Id );
+			CreateFriendEntry( friend.Member.Profile.Name, FriendMode.Friends, friend.Member.Id );
 		}
 	}
 
@@ -162,6 +165,17 @@ public class FriendsListService : MonoBehaviour {
 			friendComponent.OnFriendChallengeRequest += ChallengeFriend;
 			friendComponent.OnUnfriend += RemoveFriend;
 			friendComponent.OnCancelFriendRequest += CancelFriendRequest;
+			
+			
+			if (friendMode == FriendMode.NotFriends) {
+				_friendElement.Add( friend, friendComponent );
+			}
+		}
+	}
+
+	private void UpdateFriendEntry(string friend, FriendMode friendMode) {
+		if (_friendElement.ContainsKey(friend)) {
+			_friendElement[friend].SetFriendMode(friendMode);
 		}
 	}
 
@@ -186,6 +200,7 @@ public class FriendsListService : MonoBehaviour {
 	private void CancelFriendRequest( string userID ) {
 		Debug.LogError( $"[Friends Requests] Player {AuthenticationService.Instance.PlayerName} cancels friend request with {userID}." );
 		FriendsService.Instance.DeleteOutgoingFriendRequestAsync( userID );
+		UpdateFriendEntry(userID, FriendMode.NotFriends);
 	}
 
 	private void ChallengeFriend( string userID ) {
@@ -227,6 +242,10 @@ public class FriendsListService : MonoBehaviour {
 	private async void RemoveFriend( string playerId ) {
 		try {
 			await FriendsService.Instance.DeleteFriendAsync( playerId );
+			if (_friendElement.ContainsKey(playerId)) {
+				Destroy(_friendElement[playerId].gameObject);
+				_friendElement.Remove(playerId);
+			}
 		} catch ( ArgumentException e ) {
 			Debug.Log( "[Friend Removal] An argument exception occurred with message: " + e.Message );
 		} catch ( FriendsServiceException e ) {
@@ -243,6 +262,11 @@ public class FriendsListService : MonoBehaviour {
 	private async void AddFriend( string playerId ) {
 		try {
 			await FriendsService.Instance.AddFriendByNameAsync( playerId );
+			if (_friendRelationships.ContainsKey(playerId)) {
+				UpdateFriendEntry(playerId, FriendMode.Friends);
+			} else {
+				UpdateFriendEntry(playerId, FriendMode.Requested);
+			}
 		} catch ( ArgumentException e ) {
 			Debug.Log( "[Friend Add] An argument exception occurred with message: " + e.Message );
 		} catch ( FriendsServiceException e ) {
