@@ -8,10 +8,12 @@ using Unity.Services.Friends.Exceptions;
 using Unity.Services.Friends.Models;
 using Unity.Services.Leaderboards.Models;
 using UnityEngine;
+using UnityEngine.Events;
 using Task = System.Threading.Tasks.Task;
 
 public class FriendsListService : MonoBehaviour {
 	public static FriendsListService Instance;
+	public static Action<string> OnFriendChallengeRequest = delegate { };
 
 	[SerializeField] private GameObject _friendPrefab;
 	[SerializeField] private GameObject _friendsContainer;
@@ -205,6 +207,7 @@ public class FriendsListService : MonoBehaviour {
 
 	private void ChallengeFriend( string userID ) {
 		Debug.LogError( $"[Friends Challenge] Player {userID} challenged." );
+		OnFriendChallengeRequest?.Invoke(userID);
 	}
 
 	/// <summary>
