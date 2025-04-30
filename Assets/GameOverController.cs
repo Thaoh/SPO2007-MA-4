@@ -9,24 +9,28 @@ public class GameOverController : MonoBehaviour
     [SerializeField] private Canvas canvas;
     [SerializeField] private TMP_Text scoreText, highScoreText, worldRecordScoreText;
 
-    public void EndGame(double currentScore)
+    public async void EndGame(double currentScore)
     {
         canvas.enabled = true;
         string leaderboardID = "NoNameGame";
-        double personalBest = LeaderboardsService.Instance.GetPlayerScoreAsync(leaderboardID).Result.Score;
+        await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, 0);
+        var playerScore = await LeaderboardsService.Instance.GetPlayerScoreAsync(leaderboardID);
+        double personalBest = playerScore.Score;
         scoreText.text = currentScore.ToString();
         if (personalBest < currentScore)
         {
             personalBest = currentScore;
         }
+
         highScoreText.text = personalBest.ToString();
-        double worldRecord = LeaderboardsService.Instance.GetScoresAsync(leaderboardID).Result.Results[0].Score;
-        if (worldRecord < currentScore)
+        var worldRecordEntry = await LeaderboardsService.Instance.GetScoresAsync(leaderboardID);
+        double worldRecord = worldRecordEntry.Results[0].Score;
+    if (worldRecord < currentScore)
         {
             worldRecord = currentScore;
         }
         worldRecordScoreText.text = worldRecord.ToString();
-        LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, currentScore);
+        await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardID, currentScore);
     }
 
 

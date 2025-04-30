@@ -40,12 +40,12 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         myAudioSource = GetComponent<AudioSource>();
-        currentTime = 5;
+        currentTime = 94;
     }
 
     [SerializeField] private GameOverController gameOverController;
 
-    private async void GameOver()
+    private void GameOver()
     {
         Time.timeScale = 0;
         gameOverController.EndGame(scoremanager.Score);
