@@ -12,14 +12,17 @@ namespace CloudCode
 {
     public class CloudCodePushExample : MonoBehaviour
     {
+        
+
         [SerializeField] TextMeshProUGUI textMeshProUGUI;
-        async void Start()
+        async void Awake() 
         {
-            /*await UnityServices.InitializeAsync();
+            UGSAuthenticator.OnAuthFinishedSuccess += Subscribe;
+            //await UnityServices.InitializeAsync();
             //await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            Debug.Log(AuthenticationService.Instance.PlayerId);
-            await Task.Delay(50); 
-            await SubscribeToProjectMessages();*/
+            //Debug.Log(AuthenticationService.Instance.PlayerId);
+            //await Task.Delay(50); 
+            
             /*
             try
             {
@@ -27,13 +30,19 @@ namespace CloudCode
                 await AuthenticationService.Instance.SignInAnonymouslyAsync();
                 Debug.Log(AuthenticationService.Instance.PlayerId);
                 await Task.Delay(50);
-                //await SubscribeToProjectMessages();
+                await SubscribeToProjectMessages();
             }
             catch (Exception e)
             {
                 textMeshProUGUI.text = e.Message;
                 Debug.LogError($"[CloudCodePushExample] Crash error: {e.Message}\n{e.StackTrace}");
-            }*/  
+            }  */
+        }
+
+        async void Subscribe()
+        {
+            Debug.Log("sub");
+            await SubscribeToProjectMessages();
         }
 
         // This method creates a subscription to project messages and logs out the messages received,
@@ -45,18 +54,23 @@ namespace CloudCode
             {
                 Debug.Log(DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK"));
                 Debug.Log($"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
+                textMeshProUGUI.text = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK") + "\n" +
+                $"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
             };
-            callbacks.ConnectionStateChanged += @event =>
+            callbacks.ConnectionStateChanged += @event => 
             {
                 Debug.Log($"Got project subscription ConnectionStateChanged: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
+                textMeshProUGUI.text = $"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
             };
             callbacks.Kicked += () =>
             {
                 Debug.Log($"Got project subscription Kicked");
+                textMeshProUGUI.text = $"Got project subscription Kicked";
             };
             callbacks.Error += @event =>
             {
                 Debug.Log($"Got project subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
+                textMeshProUGUI.text = $"Got project subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
             };
             return CloudCodeService.Instance.SubscribeToProjectMessagesAsync(callbacks);
         }
