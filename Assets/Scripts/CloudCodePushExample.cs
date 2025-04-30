@@ -15,6 +15,9 @@ namespace CloudCode
         
 
         [SerializeField] TextMeshProUGUI textMeshProUGUI;
+
+        public static string message = string.Empty;
+        public static event Action OnMessageRecieved;
         async void Awake() 
         {
             UGSAuthenticator.OnAuthFinishedSuccess += Subscribe;
@@ -56,6 +59,8 @@ namespace CloudCode
                 Debug.Log($"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
                 textMeshProUGUI.text = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK") + "\n" +
                 $"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
+                message = @event.Message;
+                TriggerMessageRecieved();
             };
             callbacks.ConnectionStateChanged += @event => 
             {
@@ -75,6 +80,15 @@ namespace CloudCode
             return CloudCodeService.Instance.SubscribeToProjectMessagesAsync(callbacks);
         }
 
+
+        private void TriggerMessageRecieved()
+        {
+            // Make sure we're on the main thread for UI updates
+            if (OnMessageRecieved != null)
+            {
+                OnMessageRecieved.Invoke();
+            }
+        }
     }
 
 }
