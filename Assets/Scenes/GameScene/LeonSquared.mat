@@ -27,7 +27,7 @@ Material:
     m_Ints: []
     m_Floats:
     - _RemoveDiag: 1
-    - _WireframeVal: 0.026
+    - _WireframeVal: 0.03293649
     m_Colors:
     - _BackColor: {r: 0, g: 0.61049247, b: 1, a: 1}
     - _FrontColor: {r: 1, g: 0, b: 0, a: 1}

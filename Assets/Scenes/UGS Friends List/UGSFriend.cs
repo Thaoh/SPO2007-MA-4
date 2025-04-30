@@ -1,5 +1,3 @@
-using System;
-using PlayFab.ClientModels;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

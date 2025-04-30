@@ -30,7 +30,11 @@ public class FriendsListService : MonoBehaviour {
 			Destroy( gameObject );
 		}
 
-		UGSAuthenticator.OnAuthFinishedSuccess += OnAuthenticationSuccessful;
+		if (!UGSAuthenticator.IsAuthenticated) {
+			UGSAuthenticator.OnAuthFinishedSuccess += OnAuthenticationSuccessful;
+		} else {
+			OnAuthenticationSuccessful();
+		}
 	}
 
 	/// <summary>
