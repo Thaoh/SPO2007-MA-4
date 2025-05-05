@@ -21,8 +21,12 @@ public class UGSAuthenticator : MonoBehaviour
 
     public static UGSAuthenticator Instance;
     
-    public static bool IsAuthenticated => AuthenticationService.Instance.IsSignedIn;
-    
+    public static bool IsAuthenticated {
+        get {
+            return _isInitialized && AuthenticationService.Instance.IsSignedIn;
+        }
+    }
+
     private void Awake() {
         if (Instance == null) {
             Instance = this;

@@ -258,6 +258,11 @@ MonoBehaviour:
   _interactionButtonText: {fileID: 1595633967652179792}
   _challengeButton: {fileID: 4476107676549820954}
   _challengeButtonText: {fileID: 8203120251133987700}
+  _backgroundImage: {fileID: 5062689086989312407}
+  _friendColor: {r: 0.04681372, g: 0.43692806, b: 0.7490195, a: 1}
+  _notFriendColor: {r: 1, g: 0.55307263, b: 0, a: 0.53333336}
+  _requestedColor: {r: 0.047058824, g: 0.43692806, b: 0.7490196, a: 0.42745098}
+  _receivedColor: {r: 0.04681372, g: 0.43692806, b: 0.7490195, a: 0.41960785}
 --- !u!222 &8396913862061175885
 CanvasRenderer:
   m_ObjectHideFlags: 0
