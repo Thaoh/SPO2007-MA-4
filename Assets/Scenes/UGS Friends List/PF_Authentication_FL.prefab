@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8801520434364175476}
   - component: {fileID: 8767232720597862378}
   - component: {fileID: 3917709206073684111}
+  - component: {fileID: 5467172042847599470}
+  - component: {fileID: 978102296648320895}
   m_Layer: 0
   m_Name: PF_Authentication_FL
   m_TagString: Untagged
@@ -84,3 +86,30 @@ MonoBehaviour:
     SignInCodeExpired:
       m_PersistentCalls:
         m_Calls: []
+--- !u!114 &5467172042847599470
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8906978061435677083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d185099f52ca3674eaeaab7646664a50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  notifDelay: 0.002
+  inputField: {fileID: 0}
+--- !u!114 &978102296648320895
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8906978061435677083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b9647a1fb14c02a4781b043328570cf9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  textMeshProUGUI: {fileID: 0}

@@ -1,0 +1,13 @@
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\bin\Release\net6.0\any\WishHappyNewYear.deps.json
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\bin\Release\net6.0\any\WishHappyNewYear.dll
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\bin\Release\net6.0\any\WishHappyNewYear.pdb
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\WishHappyNewYear.csproj.AssemblyReference.cache
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\WishHappyNewYear.GeneratedMSBuildEditorConfig.editorconfig
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\WishHappyNewYear.AssemblyInfoInputs.cache
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\WishHappyNewYear.AssemblyInfo.cs
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\WishHappyNewYear.csproj.CoreCompileInputs.cache
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\WishHappyNewYear.sourcelink.json
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\WishHappyNewYear.dll
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\refint\WishHappyNewYear.dll
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\WishHappyNewYear.pdb
+D:\Documents\Unreal Projects\SPO2007-Online-Services\WishHappyNewYear\Project\obj\Release\net6.0\any\ref\WishHappyNewYear.dll
