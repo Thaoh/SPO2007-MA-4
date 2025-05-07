@@ -24,6 +24,7 @@ public class FriendsListService : MonoBehaviour {
 	private readonly Dictionary<string, UGSFriend> _friendRelationshipsElement = new();
 	private readonly Dictionary<string, Relationship> _requestSent = new();
 	private readonly Dictionary<string, Relationship> _friendRelationships = new();
+	private Dictionary<string, string> _playerNamesLookup = new(); // lookup table for playerId, playerName
 	private IReadOnlyList<Relationship> _friends;
 	private IReadOnlyList<Relationship> _friendRequestsOutgoing;
 	private IReadOnlyList<Relationship> _friendRequestsIncoming;
@@ -106,16 +107,19 @@ public class FriendsListService : MonoBehaviour {
 
 		foreach ( Unity.Services.Friends.Models.Relationship relationship in _friendRequestsOutgoing ) {
 			Debug.Log( $"[Friends List] Request sent to {relationship.Member.Profile.Name} id: {relationship.Member.Id}, ID: {relationship.Id}." );
+			_playerNamesLookup.TryAdd( relationship.Member.Id, relationship.Member.Profile.Name );
 			CreateFriendEntry( relationship.Member.Profile.Name, FriendMode.Requested, relationship.Member.Id );
 		}
 
 		foreach ( Unity.Services.Friends.Models.Relationship relationship in _friendRequestsIncoming ) {
 			CreateFriendEntry( relationship.Member.Profile.Name, FriendMode.Received, relationship.Member.Id );
+			_playerNamesLookup.TryAdd( relationship.Member.Id, relationship.Member.Profile.Name );
 		}
 		
 		_friendElement.Clear();
 		foreach ( var friend in _friends ) {
 			Debug.Log( $"[Friends List] Friendship established with {friend.Member.Profile.Name} id: {friend.Member.Id}, ID: {friend.Id}." );
+			_playerNamesLookup.TryAdd( friend.Member.Id, friend.Member.Profile.Name );
 			CreateFriendEntry( friend.Member.Profile.Name, FriendMode.Friends, friend.Member.Id );
 		}
 	}
@@ -217,7 +221,9 @@ public class FriendsListService : MonoBehaviour {
 	}
 
 	private void ChallengeFriend( string userID ) {
-		Debug.LogError( $"[Friends Challenge] Player {userID} challenged." );
+		string Name = (_playerNamesLookup.ContainsKey(userID)) ? _playerNamesLookup[userID]: userID;
+		
+		Debug.LogError( $"[Friends Challenge] Player {Name} challenged. " );
 		OnFriendChallengeRequest?.Invoke(userID);
 	}
 
