@@ -71,7 +71,7 @@ public class FriendsListService : MonoBehaviour {
 			// Update friends list
 			UpdateFriendsList();
 		} catch ( Exception e ) {
-			Debug.LogError( $"Friends service initialization error: {e}" );
+			Debug.Log( $"Friends service initialization error: {e}" );
 			_nextInitializationTime = Time.time + 0.5f;
 		}
 	}
@@ -203,7 +203,7 @@ public class FriendsListService : MonoBehaviour {
 	/// </summary>
 	/// <param name="userID">The unique identifier of the user to whom the friend request will be sent.</param>
 	private void SendFriendRequest( string userID ) {
-		Debug.LogError( $"[Friends Requests] Player {AuthenticationService.Instance.PlayerName} requests friendship with {userID}." );
+		Debug.Log( $"[Friends Requests] Player {AuthenticationService.Instance.PlayerName} requests friendship with {userID}." );
 
 		if ( !_requestSent.ContainsKey( userID ) && !_friendRelationships.ContainsKey( userID ) ) {
 			AddFriend( userID );
@@ -215,7 +215,7 @@ public class FriendsListService : MonoBehaviour {
 	}
 
 	private void CancelFriendRequest( string userID, string playerName ) {
-		Debug.LogError( $"[Friends Requests] Player {AuthenticationService.Instance.PlayerName} cancels friend request with {userID}." );
+		Debug.Log( $"[Friends Requests] Player {AuthenticationService.Instance.PlayerName} cancels friend request with {userID}." );
 		FriendsService.Instance.DeleteOutgoingFriendRequestAsync( userID );
 		UpdateFriendEntry(userID, FriendMode.NotFriends, playerName);
 	}
@@ -223,7 +223,7 @@ public class FriendsListService : MonoBehaviour {
 	private void ChallengeFriend( string userID ) {
 		string Name = (_playerNamesLookup.ContainsKey(userID)) ? _playerNamesLookup[userID]: userID;
 		
-		Debug.LogError( $"[Friends Challenge] Player {Name} challenged. " );
+		Debug.Log( $"[Friends Challenge] Player {Name} challenged. " );
 		OnFriendChallengeRequest?.Invoke(userID);
 	}
 
