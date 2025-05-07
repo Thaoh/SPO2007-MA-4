@@ -41,6 +41,8 @@ public class GameManager : MonoBehaviour
     {
         myAudioSource = GetComponent<AudioSource>();
         currentTime = 94;
+        
+        Time.timeScale = 1;
     }
 
     [SerializeField] private GameOverController gameOverController;
