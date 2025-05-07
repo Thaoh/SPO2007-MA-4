@@ -1106,7 +1106,6 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 1
-  m_PresetInfoIsWorld: 0
 --- !u!223 &834922263
 Canvas:
   m_ObjectHideFlags: 0
@@ -1638,14 +1637,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "Leaderboard:\n<font-weight=\"800\"><size=70%>1<size=70%>. <color=\"yellow\">3124P<font-weight=\"400\"><size=70%>
-    <color=\"white\">OrnateKnownCoat#6  <font-weight=\"900\">(You)<font-weight=\"400\">\n<font-weight=\"800\"><size=70%>2<size=70%>.
-    <color=\"yellow\">77P<font-weight=\"400\"><size=70%> <color=\"white\">Player#1560
-    \n<font-weight=\"800\"><size=70%>3<size=70%>. <color=\"yellow\">10P<font-weight=\"400\"><size=70%>
-    <color=\"white\">LavenderLaughingAccordion#3 \n<font-weight=\"800\"><size=70%>4<size=70%>.
-    <color=\"yellow\">8P<font-weight=\"400\"><size=70%> <color=\"white\">VagueRequiredSpoon#3
-    \n<font-weight=\"800\"><size=70%>5<size=70%>. <color=\"yellow\">0P<font-weight=\"400\"><size=70%>
-    <color=\"white\">ExtraBurningViola#7 \n"
+  m_text: 'Leaderboard:
+
+
+'
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
