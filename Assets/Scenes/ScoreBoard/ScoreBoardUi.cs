@@ -41,6 +41,8 @@ public class ScoreBoardUi : MonoBehaviour
     private async Task ShowLeaderboardAsync()
     {
         scoreBoard.text = "Loading leaderboard...";
+        
+        await LeaderboardsService.Instance.AddPlayerScoreAsync(LeaderBoardID, 0);
 
         var response = await LeaderboardsService.Instance.GetPlayerRangeAsync(LeaderBoardID, new GetPlayerRangeOptions()
         {
