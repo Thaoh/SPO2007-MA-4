@@ -13,15 +13,17 @@ namespace Unity.Services.CloudCode.GeneratedBindings
             k_Service = service;
         }
 
-        public async Task SendProjectMessage(string message, string messageType)
+        public async Task SendPlayerMessage(string playerId, string playerName, string leaderboardId, double score)
         {
             await k_Service.CallModuleEndpointAsync(
                 "WishHappyNewYear",
-                "SendProjectMessage",
+                "SendPlayerMessage",
                 new Dictionary<string, object>()
                 {
-                    {"message", message},
-                    {"messageType", messageType},
+                    {"playerId", playerId},
+                    {"playerName", playerName},
+                    {"leaderboardId", leaderboardId},
+                    {"score", score},
                 });
         }
     }
