@@ -12,38 +12,17 @@ namespace CloudCode
 {
     public class CloudCodePushExample : MonoBehaviour
     {
-
-        [SerializeField] TextMeshProUGUI textMeshProUGUI;
+        [SerializeField] private TextMeshProUGUI textMeshProUGUI;
 
         public static string message = string.Empty;
         public static event Action<IMessageReceivedEvent> OnMessageRecieved;
-        async void Awake() 
+        private void Awake() 
         {
             UGSAuthenticator.OnAuthFinishedSuccess += Subscribe;
-            //await UnityServices.InitializeAsync();
-            //await AuthenticationService.Instance.SignInAnonymouslyAsync();
-            //Debug.Log(AuthenticationService.Instance.PlayerId);
-            //await Task.Delay(50); 
-            
-            /*
-            try
-            {
-                await UnityServices.InitializeAsync();
-                await AuthenticationService.Instance.SignInAnonymouslyAsync();
-                Debug.Log(AuthenticationService.Instance.PlayerId);
-                await Task.Delay(50);
-                await SubscribeToProjectMessages();
-            }
-            catch (Exception e)
-            {
-                textMeshProUGUI.text = e.Message;
-                Debug.LogError($"[CloudCodePushExample] Crash error: {e.Message}\n{e.StackTrace}");
-            }  */
         }
 
         async void Subscribe()
         {
-            Debug.Log("sub");
             AndroidNotifcations.RequestPermission();
             AndroidNotifcations.RegisterNotificationChannel();
             await SubscribeToPlayerMessages();
@@ -58,7 +37,7 @@ namespace CloudCode
             {
                 Debug.Log(DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK"));
                 Debug.Log($"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
-                textMeshProUGUI.text = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK") + "\n" +
+                if (textMeshProUGUI) textMeshProUGUI.text = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK") + "\n" +
                 $"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
 
                 TriggerMessageRecieved(@event);
@@ -66,22 +45,19 @@ namespace CloudCode
             callbacks.ConnectionStateChanged += @event => 
             {
                 Debug.Log($"Got project subscription ConnectionStateChanged: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
-                textMeshProUGUI.text = $"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
+                if (textMeshProUGUI) textMeshProUGUI.text = $"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
             };
             callbacks.Kicked += () =>
             {
                 Debug.Log($"Got project subscription Kicked");
-                textMeshProUGUI.text = $"Got project subscription Kicked";
+                if (textMeshProUGUI) textMeshProUGUI.text = $"Got project subscription Kicked";
             };
             callbacks.Error += @event =>
             {
                 Debug.Log($"Got project subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
-                textMeshProUGUI.text = $"Got project subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
+                if (textMeshProUGUI) textMeshProUGUI.text = $"Got project subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
             };
             return CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
-        }
-        private void OnApplicationFocus(bool focus)
-        {
         }
 
         private void TriggerMessageRecieved(IMessageReceivedEvent message)

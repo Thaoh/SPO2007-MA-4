@@ -1,5 +1,4 @@
 
-
 using CloudCode;
 using TMPro;
 using Unity.Services.Leaderboards;
@@ -8,11 +7,11 @@ using UnityEngine;
 public class LeaderboardNotifications : MonoBehaviour
 {
     [SerializeField] private double notifDelay = 0.002d;
-    [SerializeField] private TMP_InputField inputField = null;
 
     private void Start()
     {
         CloudCodePushExample.OnMessageRecieved += OnMessageRecieved;
+        FriendsListService.OnFriendChallengeRequest += SendChallenge;
     }
 
     private void OnMessageRecieved(Unity.Services.CloudCode.Subscriptions.IMessageReceivedEvent obj)
@@ -21,13 +20,20 @@ public class LeaderboardNotifications : MonoBehaviour
 
     }
 
-    public void SubmitScoreLeaderboard()
+    private void SendChallenge(string playerId)
     {
-        SubmitScore("Test123", double.Parse(inputField.text));
-    }
-    public async void SubmitScore(string leaderboardId, double score)
-    {
-        var playerEntry = await LeaderboardsService.Instance.AddPlayerScoreAsync(leaderboardId, score);
+        Debug.Log("oh nothing happens on sending challenge great");
+        //string message = AuthenticationService.Instance.PlayerName + " challenges you!";
+        //Dictionary<string, object> payload = new Dictionary<string, object>
+        //    {
+        //        { "targetPlayerId", playerId },
+        //        { "message", message }
+        //    };
 
+        //CloudCodeService.Instance.CallEndpointAsync("SendMessageToPlayer", payload);
+    }
+    private void OnDestroy()
+    {
+        FriendsListService.OnFriendChallengeRequest -= SendChallenge;
     }
 }
