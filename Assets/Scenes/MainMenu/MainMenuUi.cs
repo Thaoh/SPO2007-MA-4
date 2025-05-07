@@ -11,10 +11,11 @@ public class MainMenuUi : MonoBehaviour
 {
     [Header("Data")] 
     [SerializeField] private string gameSceneName = "GameScene";
-    [SerializeField] private string challangeSceneName = "Challange";
+    [SerializeField] private string challengeSceneName = "Challenge";
     [SerializeField] private string scoreBoardSceneName = "ScoreBoard";
 
-    [Header("UI Element Refferences")] 
+    [Header("UI Element References")] 
+    [SerializeField] private Canvas mainMenuCanvas;
     [SerializeField] private Button _startGameButton;
     [SerializeField] private Button _challengeButton;
     [SerializeField] private Button _scoreBoardButton;
@@ -36,13 +37,13 @@ public class MainMenuUi : MonoBehaviour
         _challengeButton.onClick.AddListener(() =>
         {
 
-            SceneManager.LoadScene(challangeSceneName);
+            SceneManager.LoadScene(challengeSceneName);
         });
     }
 
-    private void OnInitalizedServices()
+    private void OnInitializedServices()
     {
-        UnityServices.Initialized -= OnInitalizedServices;
+        UnityServices.Initialized -= OnInitializedServices;
         // Make sure ui is updated when signin state changes
         AuthenticationService.Instance.SignedIn += OnSignIn;
         AuthenticationService.Instance.SignedOut += OnSignOut;
@@ -56,11 +57,11 @@ public class MainMenuUi : MonoBehaviour
     {
         if (UnityServices.State == ServicesInitializationState.Initialized)
         {
-            OnInitalizedServices();
+            OnInitializedServices();
         }
         else
         {
-            UnityServices.Initialized += OnInitalizedServices;
+            UnityServices.Initialized += OnInitializedServices;
         }
 
         RefreshUi();
@@ -68,7 +69,7 @@ public class MainMenuUi : MonoBehaviour
 
     private void OnDisable()
     {
-        UnityServices.Initialized -= OnInitalizedServices;
+        UnityServices.Initialized -= OnInitializedServices;
         if (AuthenticationService.Instance != null)
         {
             AuthenticationService.Instance.SignedIn -= OnSignIn;
@@ -101,6 +102,7 @@ public class MainMenuUi : MonoBehaviour
 
     void RefreshUi()
     {
+        mainMenuCanvas.enabled = true;
         UpdateUsername();
     }
 
@@ -125,7 +127,7 @@ public class MainMenuUi : MonoBehaviour
             bool isAnonymous = AuthenticationService.Instance?.PlayerInfo?.Identities?.Count == 0;
             if (isAnonymous)
             {
-                _username.text += "\n(Anonymous Account)";
+                _username.text += "\n" + AuthenticationService.Instance.PlayerName;
                 return;
             }
 
@@ -133,10 +135,5 @@ public class MainMenuUi : MonoBehaviour
                 ? $"\nID:[{AuthenticationService.Instance?.PlayerId ?? "No ID"}]"
                 : $"\n{AuthenticationService.Instance.PlayerName}";
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
     }
 }

@@ -7,18 +7,24 @@ using Unity.Services.Friends.Exceptions;
 using Unity.Services.Friends.Models;
 using Unity.Services.Leaderboards.Models;
 using UnityEngine;
+using UnityEngine.Events;
 using Task = System.Threading.Tasks.Task;
 
 public class FriendsListService : MonoBehaviour {
 	public static FriendsListService Instance;
+	public static Action<string> OnFriendChallengeRequest = delegate { };
 
 	[SerializeField] private GameObject _friendPrefab;
 	[SerializeField] private GameObject _friendsContainer;
 	[SerializeField] private TMP_Text _playerNameContainer;
 
 	private float _nextInitializationTime;
+	private readonly Dictionary<string, UGSFriend> _friendElement = new();
+	private readonly Dictionary<string, UGSFriend> _requestSentElement = new();
+	private readonly Dictionary<string, UGSFriend> _friendRelationshipsElement = new();
 	private readonly Dictionary<string, Relationship> _requestSent = new();
 	private readonly Dictionary<string, Relationship> _friendRelationships = new();
+	private Dictionary<string, string> _playerNamesLookup = new(); // lookup table for playerId, playerName
 	private IReadOnlyList<Relationship> _friends;
 	private IReadOnlyList<Relationship> _friendRequestsOutgoing;
 	private IReadOnlyList<Relationship> _friendRequestsIncoming;
@@ -30,7 +36,11 @@ public class FriendsListService : MonoBehaviour {
 			Destroy( gameObject );
 		}
 
-		UGSAuthenticator.OnAuthFinishedSuccess += OnAuthenticationSuccessful;
+		if (!UGSAuthenticator.IsAuthenticated) {
+			UGSAuthenticator.OnAuthFinishedSuccess += OnAuthenticationSuccessful;
+		} else {
+			OnAuthenticationSuccessful();
+		}
 	}
 
 	/// <summary>
@@ -50,7 +60,7 @@ public class FriendsListService : MonoBehaviour {
 	/// <returns>A task representing the asynchronous initialization operation.</returns>
 	private async Task InitializeAsync() {
 		Debug.Log( "Initialising Friends List Service" );
-
+		
 		// Initialize friends service
 		try {
 			await FriendsService.Instance.InitializeAsync();
@@ -97,16 +107,20 @@ public class FriendsListService : MonoBehaviour {
 
 		foreach ( Unity.Services.Friends.Models.Relationship relationship in _friendRequestsOutgoing ) {
 			Debug.Log( $"[Friends List] Request sent to {relationship.Member.Profile.Name} id: {relationship.Member.Id}, ID: {relationship.Id}." );
+			_playerNamesLookup.TryAdd( relationship.Member.Id, relationship.Member.Profile.Name );
 			CreateFriendEntry( relationship.Member.Profile.Name, FriendMode.Requested, relationship.Member.Id );
 		}
 
 		foreach ( Unity.Services.Friends.Models.Relationship relationship in _friendRequestsIncoming ) {
 			CreateFriendEntry( relationship.Member.Profile.Name, FriendMode.Received, relationship.Member.Id );
+			_playerNamesLookup.TryAdd( relationship.Member.Id, relationship.Member.Profile.Name );
 		}
-
+		
+		_friendElement.Clear();
 		foreach ( var friend in _friends ) {
 			Debug.Log( $"[Friends List] Friendship established with {friend.Member.Profile.Name} id: {friend.Member.Id}, ID: {friend.Id}." );
-			CreateFriendEntry( friend.Member.Id, FriendMode.Friends, friend.Member.Id );
+			_playerNamesLookup.TryAdd( friend.Member.Id, friend.Member.Profile.Name );
+			CreateFriendEntry( friend.Member.Profile.Name, FriendMode.Friends, friend.Member.Id );
 		}
 	}
 
@@ -141,8 +155,8 @@ public class FriendsListService : MonoBehaviour {
 	/// </summary>
 	/// <param name="friend">The name of the friend to be displayed.</param>
 	/// <param name="friendMode">The current friendship mode (e.g., Friends, Requested, Received).</param>
-	/// <param name="friendId">The unique identifier of the friend.</param>
-	private void CreateFriendEntry( string friend, FriendMode friendMode, string friendId ) {
+	/// <param name="memberId">The unique identifier of the friend.</param>
+	private void CreateFriendEntry( string friend, FriendMode friendMode, string memberId ) {
 		GameObject friendGO = Instantiate( _friendPrefab, _friendsContainer.transform, false );
 
 		if ( _requestSent.ContainsKey( friend ) ) {
@@ -151,14 +165,35 @@ public class FriendsListService : MonoBehaviour {
 
 		if ( friendGO.TryGetComponent( out UGSFriend friendComponent ) ) {
 			friendComponent.Name = friend;
-			friendComponent.PlayerID = friend;
+			friendComponent.PlayerID = memberId;
 			friendComponent.SetFriendMode( friendMode );
 
 			friendComponent.OnBefriendPerson += SendFriendRequest;
 			friendComponent.OnFriendChallengeRequest += ChallengeFriend;
 			friendComponent.OnUnfriend += RemoveFriend;
 			friendComponent.OnCancelFriendRequest += CancelFriendRequest;
+			
+			
+			if (friendMode == FriendMode.Friends) {
+				_friendElement.TryAdd( friend, friendComponent );
+			} else if (friendMode == FriendMode.Requested) {
+				_requestSentElement.TryAdd( friend, friendComponent );
+			} else if (friendMode == FriendMode.Received) {
+				_friendRelationshipsElement.TryAdd( friend, friendComponent );
+			}
 		}
+	}
+
+	private void UpdateFriendEntry(string friend, FriendMode friendMode, string playerName) {
+		if (_friendElement.ContainsKey(friend)) {
+			Debug.Log($"[Friends List] Friendship updated with {playerName} mode: {friendMode}, ID: {friend}.");
+			_friendElement[friend].SetFriendMode(friendMode);
+		} else if (_requestSentElement.ContainsKey(playerName)) {
+			Destroy(_requestSentElement[playerName].gameObject);
+		}  else if (_friendRelationshipsElement.ContainsKey(playerName)) {
+			Debug.Log($"[Friends List] Friendship updated with {playerName} mode: {friendMode}, ID: {friend}.");
+			_friendRelationshipsElement[playerName].SetFriendMode(friendMode);
+		} 
 	}
 
 	/// <summary>
@@ -179,13 +214,17 @@ public class FriendsListService : MonoBehaviour {
 		FriendsService.Instance.DeleteIncomingFriendRequestAsync( userID );
 	}
 
-	private void CancelFriendRequest( string userID ) {
+	private void CancelFriendRequest( string userID, string playerName ) {
 		Debug.LogError( $"[Friends Requests] Player {AuthenticationService.Instance.PlayerName} cancels friend request with {userID}." );
 		FriendsService.Instance.DeleteOutgoingFriendRequestAsync( userID );
+		UpdateFriendEntry(userID, FriendMode.NotFriends, playerName);
 	}
 
 	private void ChallengeFriend( string userID ) {
-		Debug.LogError( $"[Friends Challenge] Player {userID} challenged." );
+		string Name = (_playerNamesLookup.ContainsKey(userID)) ? _playerNamesLookup[userID]: userID;
+		
+		Debug.LogError( $"[Friends Challenge] Player {Name} challenged. " );
+		OnFriendChallengeRequest?.Invoke(userID);
 	}
 
 	/// <summary>
@@ -207,6 +246,7 @@ public class FriendsListService : MonoBehaviour {
 		}
 
 		Debug.Log( "[Friends Discovery] Building list of possible future friends." );
+		
 		leaderboard.ForEach( friend => {
 			if (friend.PlayerName != AuthenticationService.Instance.PlayerName) {
 				//Debug.Log($"[FriendsDiscovery] Built fd list {friend.PlayerName} id: {friend.Metadata}, ID: {friend.PlayerId}.");
@@ -223,6 +263,10 @@ public class FriendsListService : MonoBehaviour {
 	private async void RemoveFriend( string playerId ) {
 		try {
 			await FriendsService.Instance.DeleteFriendAsync( playerId );
+			if (_friendElement.ContainsKey(playerId)) {
+				Destroy(_friendElement[playerId].gameObject);
+				_friendElement.Remove(playerId);
+			}
 		} catch ( ArgumentException e ) {
 			Debug.Log( "[Friend Removal] An argument exception occurred with message: " + e.Message );
 		} catch ( FriendsServiceException e ) {
@@ -235,10 +279,18 @@ public class FriendsListService : MonoBehaviour {
 	/// This method attempts to initiate the addition of a friend and handles exceptions that may occur
 	/// during the process, including argument exceptions and errors specific to the Friends Service.
 	/// </summary>
-	/// <param name="playerId">The unique identifier of the player to be added as a friend.</param>
-	private async void AddFriend( string playerId ) {
+	/// <param name="playerName">The unique identifier of the player to be added as a friend.</param>
+	private async void AddFriend( string playerName ) {
 		try {
-			await FriendsService.Instance.AddFriendByNameAsync( playerId );
+			await FriendsService.Instance.AddFriendByNameAsync( playerName );
+			
+			// We're adding players by name, as that is what the Leaderboards give us.
+			
+			if (_friendRelationships.ContainsKey(playerName)) {
+				UpdateFriendEntry(playerName, FriendMode.Friends, playerName);
+			} else {
+				UpdateFriendEntry(playerName, FriendMode.Requested, playerName);
+			}
 		} catch ( ArgumentException e ) {
 			Debug.Log( "[Friend Add] An argument exception occurred with message: " + e.Message );
 		} catch ( FriendsServiceException e ) {

@@ -19,6 +19,24 @@ public class UGSAuthenticator : MonoBehaviour
     private const int AUTH_RETRY_DELAY_MS = 500;
     private const int MAX_AUTH_ATTEMPTS = 3;
 
+    public static UGSAuthenticator Instance;
+    
+    public static bool IsAuthenticated {
+        get {
+            return _isInitialized && AuthenticationService.Instance.IsSignedIn;
+        }
+    }
+
+    private void Awake() {
+        if (Instance == null) {
+            Instance = this;
+        } else {
+            Destroy(gameObject);
+        }
+        
+        DontDestroyOnLoad(this);
+    }
+
     private async void Start()
     {
         // Initialize services if needed
