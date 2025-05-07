@@ -13,11 +13,10 @@ namespace CloudCode
     public class CloudCodePushExample : MonoBehaviour
     {
 
-        [SerializeField] private double notifDelay = 0.004d;
         [SerializeField] TextMeshProUGUI textMeshProUGUI;
 
         public static string message = string.Empty;
-        public static event Action OnMessageRecieved;
+        public static event Action<IMessageReceivedEvent> OnMessageRecieved;
         async void Awake() 
         {
             UGSAuthenticator.OnAuthFinishedSuccess += Subscribe;
@@ -47,12 +46,12 @@ namespace CloudCode
             Debug.Log("sub");
             AndroidNotifcations.RequestPermission();
             AndroidNotifcations.RegisterNotificationChannel();
-            await SubscribeToProjectMessages();
+            await SubscribeToPlayerMessages();
         }
 
         // This method creates a subscription to project messages and logs out the messages received,
         // the state changes of the connection, when the player is kicked and when an error occurs.
-        Task SubscribeToProjectMessages()
+        private Task SubscribeToPlayerMessages()
         {
             var callbacks = new SubscriptionEventCallbacks();
             callbacks.MessageReceived += @event =>
@@ -62,8 +61,7 @@ namespace CloudCode
                 textMeshProUGUI.text = DateTime.Now.ToString("yyyy-MM-dd'T'HH:mm:ss.fffK") + "\n" +
                 $"Got project subscription Message: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
 
-                message = @event.Message;
-                TriggerMessageRecieved();
+                TriggerMessageRecieved(@event);
             };
             callbacks.ConnectionStateChanged += @event => 
             {
@@ -80,21 +78,20 @@ namespace CloudCode
                 Debug.Log($"Got project subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}");
                 textMeshProUGUI.text = $"Got project subscription Error: {JsonConvert.SerializeObject(@event, Formatting.Indented)}";
             };
-            return CloudCodeService.Instance.SubscribeToProjectMessagesAsync(callbacks);
+            return CloudCodeService.Instance.SubscribeToPlayerMessagesAsync(callbacks);
         }
         private void OnApplicationFocus(bool focus)
         {
         }
 
-        private void TriggerMessageRecieved()
+        private void TriggerMessageRecieved(IMessageReceivedEvent message)
         {
             // Make sure we're on the main thread for UI updates
             if (OnMessageRecieved != null)
             {
-                OnMessageRecieved.Invoke();
+                OnMessageRecieved.Invoke(message);
             }
 
-            AndroidNotifcations.SendNotification("Beat The Tunnel", message, notifDelay);
         }
     }
 
