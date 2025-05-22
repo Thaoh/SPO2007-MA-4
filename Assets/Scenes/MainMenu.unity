@@ -272,6 +272,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e6e6a6543d62e5408b44d6529f3860f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _leaderBoardId: NoNameGame
 --- !u!114 &183414105
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -285,6 +286,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _notifDelay: 0.002
+  _checkDelay: 5
 --- !u!1 &222818287
 GameObject:
   m_ObjectHideFlags: 0

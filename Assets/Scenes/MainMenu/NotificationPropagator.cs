@@ -2,6 +2,7 @@ using UnityEngine;
 using Unity.Services.CloudSave;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using CloudCode;
 
 public class NotificationPropagator : MonoBehaviour {
 	[SerializeField] private double _notifDelay = 0.002d;
@@ -11,9 +12,13 @@ public class NotificationPropagator : MonoBehaviour {
 	private bool _currentlyLoadingData;
 
 	private void Awake() {
+		CloudCodePushExample.OnMessageRecieved += OnMessageRecieved;
 		UGSAuthenticator.OnAuthFinishedSuccess += SetupToNotifications;
 	}
 
+	private void OnDestroy() {
+		CloudCodePushExample.OnMessageRecieved -= OnMessageRecieved;
+	}
 	private async void SetupToNotifications() {
 		AndroidNotifcations.RequestPermission();
 		AndroidNotifcations.RegisterNotificationChannel();
@@ -57,5 +62,9 @@ public class NotificationPropagator : MonoBehaviour {
 	}
 	private void SendNotificationToPhone(string notificationMessage) {
 		AndroidNotifcations.SendNotification("Beat The Tunnel", notificationMessage, _notifDelay);
+	}
+	
+	private void OnMessageRecieved(Unity.Services.CloudCode.Subscriptions.IMessageReceivedEvent obj) {
+		AndroidNotifcations.SendNotification("Beat The Tunnel", obj.Message, _notifDelay);
 	}
 }
